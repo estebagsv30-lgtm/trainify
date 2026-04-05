@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Trainify – Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #0d0d0d; --surface: #161616; --surface2: #1e1e1e;
+      --border: #2a2a2a; --accent: #e8ff47; --accent2: #ff6b35;
+      --text: #f0f0f0; --muted: #888;
+      --font-display: 'Bebas Neue', sans-serif;
+      --font-body: 'DM Sans', sans-serif;
+    }
+    body { background: var(--bg); color: var(--text); font-family: var(--font-body); min-height: 100vh; }
+
+    /* NAV */
+    nav {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 16px 28px;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      position: sticky; top: 0; z-index: 100;
+    }
+    .nav-logo { font-family: var(--font-display); font-size: 1.8rem; letter-spacing: 3px; color: var(--accent); }
+    .nav-user { display: flex; align-items: center; gap: 14px; }
+    .nav-user span { color: var(--muted); font-size: 0.85rem; }
+    .btn-logout {
+      background: none; border: 1px solid var(--border); color: var(--muted);
+      padding: 6px 14px; border-radius: 8px; cursor: pointer; font-family: var(--font-body); font-size: 0.82rem;
+      transition: all 0.2s;
+    }
+    .btn-logout:hover { border-color: #ff6b6b; color: #ff6b6b; }
+
+    /* MAIN */
+    main { max-width: 900px; margin: 0 auto; padding: 36px 20px; }
+
+    .greeting { font-family: var(--font-display); font-size: 2.4rem; letter-spacing: 2px; margin-bottom: 4px; }
+    .greeting span { color: var(--accent); }
+    .sub { color: var(--muted); font-size: 0.9rem; margin-bottom: 36px; }
+
+    /* STATS */
+    .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 36px; }
+    .stat-card {
+      background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 22px 20px;
+      text-align: center; transition: border-color 0.2s;
+    }
+    .stat-card:hover { border-color: var(--accent); }
+    .stat-num { font-family: var(--font-display); font-size: 2.6rem; color: var(--accent); letter-spacing: 1px; }
+    .stat-label { font-size: 0.78rem; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-top: 4px; }
+
+    /* SECTION */
+    .section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; }
+    .section-title { font-family: var(--font-display); font-size: 1.5rem; letter-spacing: 2px; }
+    .section-title span { color: var(--accent); }
+
+    .btn-add {
+      background: var(--accent); color: #000; border: none; border-radius: 8px;
+      padding: 9px 18px; font-family: var(--font-body); font-weight: 600; font-size: 0.85rem;
+      cursor: pointer; transition: opacity 0.2s, transform 0.1s;
+    }
+    .btn-add:hover { opacity: 0.88; transform: translateY(-1px); }
+
+    /* RUTINAS */
+    .rutinas-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 14px; margin-bottom: 40px; }
+
+    .rutina-card {
+      background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 22px;
+      cursor: pointer; transition: all 0.2s; position: relative; overflow: hidden;
+    }
+    .rutina-card::before {
+      content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 100%;
+      background: var(--accent); opacity: 0; transition: opacity 0.2s;
+    }
+    .rutina-card:hover { border-color: var(--accent); transform: translateY(-2px); }
+    .rutina-card:hover::before { opacity: 1; }
+    .rutina-name { font-weight: 600; font-size: 1rem; margin-bottom: 6px; }
+    .rutina-count { font-size: 0.78rem; color: var(--muted); }
+    .rutina-actions { display: flex; gap: 8px; margin-top: 14px; }
+    .btn-sm {
+      flex: 1; padding: 7px 0; border-radius: 8px; font-size: 0.78rem;
+      font-family: var(--font-body); font-weight: 500; cursor: pointer; transition: all 0.2s;
+    }
+    .btn-view  { background: var(--surface2); border: 1px solid var(--border); color: var(--text); }
+    .btn-view:hover { border-color: var(--accent); color: var(--accent); }
+    .btn-del   { background: none; border: 1px solid var(--border); color: var(--muted); }
+    .btn-del:hover { border-color: #ff6b6b; color: #ff6b6b; }
+
+    .empty { color: var(--muted); font-size: 0.9rem; padding: 24px 0; text-align: center; }
+
+    /* PESO */
+    .peso-section { margin-bottom: 40px; }
+    .peso-form { display: flex; gap: 10px; margin-bottom: 20px; }
+    .peso-form input {
+      flex: 1; background: var(--surface); border: 1px solid var(--border); border-radius: 10px;
+      padding: 12px 16px; color: var(--text); font-family: var(--font-body); font-size: 0.95rem; outline: none;
+      transition: border-color 0.2s;
+    }
+    .peso-form input:focus { border-color: var(--accent); }
+
+    .peso-list { display: flex; flex-direction: column; gap: 8px; }
+    .peso-item {
+      display: flex; justify-content: space-between; align-items: center;
+      background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 12px 16px;
+    }
+    .peso-val { font-weight: 600; color: var(--accent); }
+    .peso-date { font-size: 0.8rem; color: var(--muted); }
+    .peso-del { background: none; border: none; color: var(--muted); cursor: pointer; font-size: 1rem; transition: color 0.2s; }
+    .peso-del:hover { color: #ff6b6b; }
+
+    /* MODAL */
+    .modal-overlay {
+      display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.75);
+      z-index: 200; align-items: center; justify-content: center; padding: 20px;
+    }
+    .modal-overlay.open { display: flex; }
+    .modal {
+      background: var(--surface); border: 1px solid var(--border); border-radius: 16px;
+      padding: 32px; width: 100%; max-width: 460px; animation: fadeUp 0.3s ease both;
+    }
+    .modal-title { font-family: var(--font-display); font-size: 1.6rem; letter-spacing: 2px; margin-bottom: 22px; }
+    .form-group { margin-bottom: 16px; }
+    label { display: block; font-size: 0.75rem; color: var(--muted); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 6px; }
+    input, textarea {
+      width: 100%; background: var(--bg); border: 1px solid var(--border); border-radius: 10px;
+      padding: 12px 14px; color: var(--text); font-family: var(--font-body); font-size: 0.9rem; outline: none;
+      transition: border-color 0.2s;
+    }
+    input:focus, textarea:focus { border-color: var(--accent); }
+    textarea { resize: vertical; min-height: 80px; }
+    .modal-actions { display: flex; gap: 10px; margin-top: 6px; }
+    .btn-cancel {
+      flex: 1; padding: 12px; background: none; border: 1px solid var(--border); color: var(--muted);
+      border-radius: 10px; font-family: var(--font-body); cursor: pointer; transition: all 0.2s;
+    }
+    .btn-cancel:hover { border-color: var(--text); color: var(--text); }
+    .btn-save {
+      flex: 2; padding: 12px; background: var(--accent); color: #000; border: none;
+      border-radius: 10px; font-family: var(--font-body); font-weight: 600; cursor: pointer; transition: opacity 0.2s;
+    }
+    .btn-save:hover { opacity: 0.88; }
+
+    @keyframes fadeUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
+
+    @media (max-width: 600px) {
+      .stats { grid-template-columns: repeat(2, 1fr); }
+      .stats .stat-card:last-child { grid-column: 1/-1; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">TRAINIFY</div>
+  <div class="nav-user">
+    <span id="nav-name">...</span>
+    <button class="btn-logout" onclick="logout()">Cerrar sesión</button>
+  </div>
+</nav>
+
+<main>
+  <div class="greeting">HOLA, <span id="user-name">...</span></div>
+  <div class="sub">Aquí tienes un resumen de tu actividad</div>
+
+  <!-- STATS -->
+  <div class="stats">
+    <div class="stat-card">
+      <div class="stat-num" id="stat-rutinas">0</div>
+      <div class="stat-label">Rutinas</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num" id="stat-ejercicios">0</div>
+      <div class="stat-label">Ejercicios</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num" id="stat-peso">–</div>
+      <div class="stat-label">Último peso (kg)</div>
+    </div>
+  </div>
+
+  <!-- RUTINAS -->
+  <div class="section-header">
+    <div class="section-title">MIS <span>RUTINAS</span></div>
+    <button class="btn-add" onclick="openModal()">+ Nueva rutina</button>
+  </div>
+  <div class="rutinas-grid" id="rutinas-grid">
+    <div class="empty">No tienes rutinas todavía. ¡Crea la primera!</div>
+  </div>
+
+  <!-- PESO -->
+  <div class="peso-section">
+    <div class="section-header">
+      <div class="section-title">PESO <span>CORPORAL</span></div>
+    </div>
+    <div class="peso-form">
+      <input type="number" id="peso-input" placeholder="Introduce tu peso (kg)" step="0.1" min="0"/>
+      <button class="btn-add" onclick="addPeso()">Registrar</button>
+    </div>
+    <div class="peso-list" id="peso-list">
+      <div class="empty">Sin registros de peso todavía.</div>
+    </div>
+  </div>
+</main>
+
+<!-- MODAL NUEVA RUTINA -->
+<div class="modal-overlay" id="modal">
+  <div class="modal">
+    <div class="modal-title">NUEVA RUTINA</div>
+    <div class="form-group">
+      <label>Nombre de la rutina</label>
+      <input type="text" id="m-nombre" placeholder="Ej: Push Day, Piernas, Full Body..."/>
+    </div>
+    <div class="form-group">
+      <label>Ejercicios (uno por línea)</label>
+      <textarea id="m-ejercicios" placeholder="Press banca&#10;Sentadilla&#10;Dominadas"></textarea>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeModal()">Cancelar</button>
+      <button class="btn-save" onclick="saveRutina()">Guardar rutina</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  let session = JSON.parse(localStorage.getItem('trainify_session'));
+  if (!session) { window.location.href = 'index.html'; }
+
+  const uid = session.id;
+  document.getElementById('user-name').textContent = session.name.toUpperCase();
+  document.getElementById('nav-name').textContent = session.name;
+
+  // --- HELPERS ---
+  function getRutinas() { return JSON.parse(localStorage.getItem(`trainify_rutinas_${uid}`) || '[]'); }
+  function saveRutinas(r) { localStorage.setItem(`trainify_rutinas_${uid}`, JSON.stringify(r)); }
+  function getPesos() { return JSON.parse(localStorage.getItem(`trainify_pesos_${uid}`) || '[]'); }
+  function savePesos(p) { localStorage.setItem(`trainify_pesos_${uid}`, JSON.stringify(p)); }
+
+  // --- RENDER ---
+  function render() {
+    const rutinas = getRutinas();
+    const pesos   = getPesos();
+    const grid    = document.getElementById('rutinas-grid');
+
+    // Stats
+    const totalEj = rutinas.reduce((a, r) => a + r.ejercicios.length, 0);
+    document.getElementById('stat-rutinas').textContent   = rutinas.length;
+    document.getElementById('stat-ejercicios').textContent = totalEj;
+    document.getElementById('stat-peso').textContent = pesos.length ? pesos[0].val + ' kg' : '–';
+
+    // Rutinas
+    if (rutinas.length === 0) {
+      grid.innerHTML = '<div class="empty">No tienes rutinas todavía. ¡Crea la primera!</div>';
+    } else {
+      grid.innerHTML = rutinas.map((r, i) => `
+        <div class="rutina-card">
+          <div class="rutina-name">${r.nombre}</div>
+          <div class="rutina-count">${r.ejercicios.length} ejercicio${r.ejercicios.length !== 1 ? 's' : ''}</div>
+          <div class="rutina-actions">
+            <button class="btn-sm btn-view" onclick="window.location.href='rutina.html?id=${i}'">Ver detalle</button>
+            <button class="btn-sm btn-del"  onclick="deleteRutina(${i})">Eliminar</button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // Pesos
+    const pesoList = document.getElementById('peso-list');
+    if (pesos.length === 0) {
+      pesoList.innerHTML = '<div class="empty">Sin registros de peso todavía.</div>';
+    } else {
+      pesoList.innerHTML = pesos.map((p, i) => `
+        <div class="peso-item">
+          <div>
+            <span class="peso-val">${p.val} kg</span>
+          </div>
+          <div class="peso-date">${p.fecha}</div>
+          <button class="peso-del" onclick="deletePeso(${i})">✕</button>
+        </div>
+      `).join('');
+    }
+  }
+
+  // --- RUTINAS ---
+  function openModal() { document.getElementById('modal').classList.add('open'); }
+  function closeModal() { document.getElementById('modal').classList.remove('open'); document.getElementById('m-nombre').value=''; document.getElementById('m-ejercicios').value=''; }
+
+  function saveRutina() {
+    const nombre = document.getElementById('m-nombre').value.trim();
+    const ejText = document.getElementById('m-ejercicios').value.trim();
+    if (!nombre) { alert('Introduce un nombre para la rutina.'); return; }
+    const ejercicios = ejText ? ejText.split('\n').map(e => e.trim()).filter(Boolean) : [];
+    const rutinas = getRutinas();
+    rutinas.push({ nombre, ejercicios });
+    saveRutinas(rutinas);
+    closeModal();
+    render();
+  }
+
+  function deleteRutina(i) {
+    if (!confirm('¿Eliminar esta rutina?')) return;
+    const rutinas = getRutinas();
+    rutinas.splice(i, 1);
+    saveRutinas(rutinas);
+    render();
+  }
+
+  // --- PESO ---
+  function addPeso() {
+    const val = parseFloat(document.getElementById('peso-input').value);
+    if (!val || val <= 0) { alert('Introduce un peso válido.'); return; }
+    const pesos = getPesos();
+    const fecha = new Date().toLocaleDateString('es-ES', { day: '2-digit', month: 'short', year: 'numeric' });
+    pesos.unshift({ val, fecha });
+    savePesos(pesos);
+    document.getElementById('peso-input').value = '';
+    render();
+  }
+
+  function deletePeso(i) {
+    const pesos = getPesos();
+    pesos.splice(i, 1);
+    savePesos(pesos);
+    render();
+  }
+
+  function logout() {
+    localStorage.removeItem('trainify_session');
+    window.location.href = 'index.html';
+  }
+
+  render();
+</script>
+</body>
+</html>

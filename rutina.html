@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Trainify – Rutina</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #0d0d0d; --surface: #161616; --surface2: #1e1e1e;
+      --border: #2a2a2a; --accent: #e8ff47;
+      --text: #f0f0f0; --muted: #888;
+      --font-display: 'Bebas Neue', sans-serif;
+      --font-body: 'DM Sans', sans-serif;
+    }
+    body { background: var(--bg); color: var(--text); font-family: var(--font-body); min-height: 100vh; }
+
+    nav {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 16px 28px; background: var(--surface); border-bottom: 1px solid var(--border);
+      position: sticky; top: 0; z-index: 100;
+    }
+    .nav-logo { font-family: var(--font-display); font-size: 1.8rem; letter-spacing: 3px; color: var(--accent); }
+    .btn-back {
+      background: none; border: 1px solid var(--border); color: var(--muted);
+      padding: 7px 16px; border-radius: 8px; cursor: pointer; font-family: var(--font-body); font-size: 0.85rem;
+      transition: all 0.2s;
+    }
+    .btn-back:hover { border-color: var(--accent); color: var(--accent); }
+
+    main { max-width: 700px; margin: 0 auto; padding: 36px 20px; }
+
+    .rutina-header { margin-bottom: 32px; }
+    .rutina-title { font-family: var(--font-display); font-size: 2.8rem; letter-spacing: 3px; color: var(--accent); }
+    .rutina-sub { color: var(--muted); font-size: 0.85rem; margin-top: 4px; }
+
+    .section-title {
+      font-family: var(--font-display); font-size: 1.3rem; letter-spacing: 2px;
+      margin-bottom: 14px; padding-bottom: 10px; border-bottom: 1px solid var(--border);
+    }
+
+    /* EJERCICIOS */
+    .ejercicios-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 36px; }
+    .ejercicio-item {
+      display: flex; align-items: center; justify-content: space-between;
+      background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 16px 18px;
+      transition: border-color 0.2s;
+    }
+    .ejercicio-item:hover { border-color: var(--accent); }
+    .ejercicio-nombre { font-weight: 500; }
+    .ejercicio-num { font-family: var(--font-display); font-size: 1.3rem; color: var(--accent); margin-right: 12px; min-width: 32px; }
+    .btn-del-ej {
+      background: none; border: none; color: var(--muted); cursor: pointer; font-size: 1rem;
+      padding: 4px 8px; border-radius: 6px; transition: color 0.2s;
+    }
+    .btn-del-ej:hover { color: #ff6b6b; }
+
+    /* AÑADIR EJERCICIO */
+    .add-ej-form { display: flex; gap: 10px; margin-bottom: 36px; }
+    .add-ej-form input {
+      flex: 1; background: var(--surface); border: 1px solid var(--border); border-radius: 10px;
+      padding: 12px 16px; color: var(--text); font-family: var(--font-body); font-size: 0.9rem; outline: none;
+      transition: border-color 0.2s;
+    }
+    .add-ej-form input:focus { border-color: var(--accent); }
+    .btn-add {
+      background: var(--accent); color: #000; border: none; border-radius: 10px;
+      padding: 12px 20px; font-family: var(--font-body); font-weight: 600; font-size: 0.85rem;
+      cursor: pointer; white-space: nowrap; transition: opacity 0.2s;
+    }
+    .btn-add:hover { opacity: 0.88; }
+
+    /* REGISTRAR ENTRENAMIENTO */
+    .registro-section { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 24px; margin-bottom: 36px; }
+    .registro-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-bottom: 16px; }
+    .reg-field label { display: block; font-size: 0.72rem; color: var(--muted); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 6px; }
+    .reg-field input {
+      width: 100%; background: var(--bg); border: 1px solid var(--border); border-radius: 8px;
+      padding: 10px 12px; color: var(--text); font-family: var(--font-body); font-size: 0.9rem; outline: none;
+      transition: border-color 0.2s;
+    }
+    .reg-field input:focus { border-color: var(--accent); }
+    .reg-field select {
+      width: 100%; background: var(--bg); border: 1px solid var(--border); border-radius: 8px;
+      padding: 10px 12px; color: var(--text); font-family: var(--font-body); font-size: 0.9rem; outline: none;
+      transition: border-color 0.2s; cursor: pointer;
+    }
+    .reg-field select:focus { border-color: var(--accent); }
+    .btn-registrar {
+      width: 100%; padding: 12px; background: var(--accent); color: #000; border: none;
+      border-radius: 10px; font-family: var(--font-body); font-weight: 600; cursor: pointer; transition: opacity 0.2s;
+    }
+    .btn-registrar:hover { opacity: 0.88; }
+
+    /* HISTORIAL */
+    .historial-list { display: flex; flex-direction: column; gap: 8px; }
+    .historial-item {
+      background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px;
+      display: grid; grid-template-columns: 2fr 1fr 1fr 1fr auto; align-items: center; gap: 10px;
+    }
+    .h-ejercicio { font-weight: 500; font-size: 0.9rem; }
+    .h-val { font-size: 0.82rem; color: var(--muted); text-align: center; }
+    .h-val span { display: block; color: var(--accent); font-weight: 600; font-size: 1rem; }
+    .h-date { font-size: 0.75rem; color: var(--muted); }
+    .btn-del-h { background: none; border: none; color: var(--muted); cursor: pointer; font-size: 0.9rem; transition: color 0.2s; }
+    .btn-del-h:hover { color: #ff6b6b; }
+
+    .empty { color: var(--muted); font-size: 0.85rem; padding: 16px 0; text-align: center; }
+
+    /* EDITAR NOMBRE */
+    .edit-nombre-form { display: flex; gap: 10px; margin-bottom: 20px; }
+    .edit-nombre-form input {
+      flex: 1; background: var(--surface); border: 1px solid var(--border); border-radius: 10px;
+      padding: 10px 14px; color: var(--text); font-family: var(--font-body); font-size: 0.9rem; outline: none;
+      transition: border-color 0.2s;
+    }
+    .edit-nombre-form input:focus { border-color: var(--accent); }
+    .btn-edit {
+      background: var(--surface2); border: 1px solid var(--border); color: var(--text);
+      padding: 10px 16px; border-radius: 10px; font-family: var(--font-body); font-size: 0.85rem;
+      cursor: pointer; transition: all 0.2s;
+    }
+    .btn-edit:hover { border-color: var(--accent); color: var(--accent); }
+
+    @media (max-width: 600px) {
+      .registro-grid { grid-template-columns: 1fr 1fr; }
+      .historial-item { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">TRAINIFY</div>
+  <button class="btn-back" onclick="window.location.href='dashboard.html'">← Volver</button>
+</nav>
+
+<main>
+  <div class="rutina-header">
+    <div class="rutina-title" id="rutina-title">...</div>
+    <div class="rutina-sub" id="rutina-sub">0 ejercicios</div>
+  </div>
+
+  <!-- EDITAR NOMBRE -->
+  <div class="section-title">EDITAR NOMBRE</div>
+  <div class="edit-nombre-form">
+    <input type="text" id="edit-nombre-input" placeholder="Nuevo nombre..."/>
+    <button class="btn-edit" onclick="editarNombre()">Guardar</button>
+  </div>
+
+  <!-- EJERCICIOS -->
+  <div class="section-title">EJERCICIOS</div>
+  <div class="ejercicios-list" id="ejercicios-list"></div>
+  <div class="add-ej-form">
+    <input type="text" id="new-ej" placeholder="Añadir ejercicio..."/>
+    <button class="btn-add" onclick="addEjercicio()">+ Añadir</button>
+  </div>
+
+  <!-- REGISTRAR SESIÓN -->
+  <div class="section-title">REGISTRAR SESIÓN</div>
+  <div class="registro-section">
+    <div class="registro-grid">
+      <div class="reg-field">
+        <label>Ejercicio</label>
+        <select id="reg-ejercicio"></select>
+      </div>
+      <div class="reg-field">
+        <label>Series</label>
+        <input type="number" id="reg-series" placeholder="3" min="1"/>
+      </div>
+      <div class="reg-field">
+        <label>Repeticiones</label>
+        <input type="number" id="reg-reps" placeholder="10" min="1"/>
+      </div>
+      <div class="reg-field">
+        <label>Peso (kg)</label>
+        <input type="number" id="reg-peso" placeholder="50" min="0" step="0.5"/>
+      </div>
+    </div>
+    <button class="btn-registrar" onclick="registrarSesion()">Registrar entrenamiento</button>
+  </div>
+
+  <!-- HISTORIAL -->
+  <div class="section-title">HISTORIAL</div>
+  <div class="historial-list" id="historial-list"></div>
+</main>
+
+<script>
+  const session = JSON.parse(localStorage.getItem('trainify_session'));
+  if (!session) window.location.href = 'index.html';
+
+  const uid = session.id;
+  const params = new URLSearchParams(window.location.search);
+  const rutinaIdx = parseInt(params.get('id'));
+
+  function getRutinas() { return JSON.parse(localStorage.getItem(`trainify_rutinas_${uid}`) || '[]'); }
+  function saveRutinas(r) { localStorage.setItem(`trainify_rutinas_${uid}`, JSON.stringify(r)); }
+  function getHistorial() { return JSON.parse(localStorage.getItem(`trainify_historial_${uid}_${rutinaIdx}`) || '[]'); }
+  function saveHistorial(h) { localStorage.setItem(`trainify_historial_${uid}_${rutinaIdx}`, JSON.stringify(h)); }
+
+  function getRutina() {
+    const rutinas = getRutinas();
+    if (isNaN(rutinaIdx) || rutinaIdx < 0 || rutinaIdx >= rutinas.length) {
+      window.location.href = 'dashboard.html'; return null;
+    }
+    return rutinas[rutinaIdx];
+  }
+
+  function render() {
+    const rutina = getRutina(); if (!rutina) return;
+    const historial = getHistorial();
+
+    document.getElementById('rutina-title').textContent = rutina.nombre.toUpperCase();
+    document.getElementById('rutina-sub').textContent = `${rutina.ejercicios.length} ejercicio${rutina.ejercicios.length !== 1 ? 's' : ''}`;
+    document.title = `Trainify – ${rutina.nombre}`;
+
+    // Ejercicios
+    const ejList = document.getElementById('ejercicios-list');
+    if (rutina.ejercicios.length === 0) {
+      ejList.innerHTML = '<div class="empty">Sin ejercicios. Añade el primero.</div>';
+    } else {
+      ejList.innerHTML = rutina.ejercicios.map((ej, i) => `
+        <div class="ejercicio-item">
+          <div style="display:flex;align-items:center;">
+            <span class="ejercicio-num">${String(i+1).padStart(2,'0')}</span>
+            <span class="ejercicio-nombre">${ej}</span>
+          </div>
+          <button class="btn-del-ej" onclick="deleteEjercicio(${i})">✕</button>
+        </div>
+      `).join('');
+    }
+
+    // Select del registro
+    const sel = document.getElementById('reg-ejercicio');
+    sel.innerHTML = rutina.ejercicios.length
+      ? rutina.ejercicios.map(e => `<option>${e}</option>`).join('')
+      : '<option disabled>Sin ejercicios</option>';
+
+    // Historial
+    const histList = document.getElementById('historial-list');
+    if (historial.length === 0) {
+      histList.innerHTML = '<div class="empty">Sin sesiones registradas todavía.</div>';
+    } else {
+      histList.innerHTML = historial.map((h, i) => `
+        <div class="historial-item">
+          <div class="h-ejercicio">${h.ejercicio}</div>
+          <div class="h-val"><span>${h.series}</span>series</div>
+          <div class="h-val"><span>${h.reps}</span>reps</div>
+          <div class="h-val"><span>${h.peso}</span>kg</div>
+          <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px;">
+            <span class="h-date">${h.fecha}</span>
+            <button class="btn-del-h" onclick="deleteHistorial(${i})">✕</button>
+          </div>
+        </div>
+      `).join('');
+    }
+  }
+
+  function editarNombre() {
+    const val = document.getElementById('edit-nombre-input').value.trim();
+    if (!val) { alert('Introduce un nombre válido.'); return; }
+    const rutinas = getRutinas();
+    rutinas[rutinaIdx].nombre = val;
+    saveRutinas(rutinas);
+    document.getElementById('edit-nombre-input').value = '';
+    render();
+  }
+
+  function addEjercicio() {
+    const val = document.getElementById('new-ej').value.trim();
+    if (!val) return;
+    const rutinas = getRutinas();
+    rutinas[rutinaIdx].ejercicios.push(val);
+    saveRutinas(rutinas);
+    document.getElementById('new-ej').value = '';
+    render();
+  }
+
+  function deleteEjercicio(i) {
+    if (!confirm('¿Eliminar este ejercicio?')) return;
+    const rutinas = getRutinas();
+    rutinas[rutinaIdx].ejercicios.splice(i, 1);
+    saveRutinas(rutinas);
+    render();
+  }
+
+  function registrarSesion() {
+    const ejercicio = document.getElementById('reg-ejercicio').value;
+    const series = parseInt(document.getElementById('reg-series').value);
+    const reps   = parseInt(document.getElementById('reg-reps').value);
+    const peso   = parseFloat(document.getElementById('reg-peso').value);
+    if (!ejercicio || !series || !reps) { alert('Rellena al menos ejercicio, series y repeticiones.'); return; }
+    const historial = getHistorial();
+    const fecha = new Date().toLocaleDateString('es-ES', { day:'2-digit', month:'short', year:'numeric' });
+    historial.unshift({ ejercicio, series, reps, peso: peso || 0, fecha });
+    saveHistorial(historial);
+    document.getElementById('reg-series').value = '';
+    document.getElementById('reg-reps').value   = '';
+    document.getElementById('reg-peso').value   = '';
+    render();
+  }
+
+  function deleteHistorial(i) {
+    const h = getHistorial();
+    h.splice(i, 1);
+    saveHistorial(h);
+    render();
+  }
+
+  render();
+</script>
+</body>
+</html>
