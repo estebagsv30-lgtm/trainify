@@ -2,11 +2,14 @@
 
 Aplicación web para gestionar rutinas de entrenamiento y seguimiento del progreso físico, desarrollada como proyecto intermodular del ciclo formativo de **Desarrollo de Aplicaciones Multiplataforma (DAM)**.
 
+🌐 **Aplicación en producción:** https://estebagsv30-lgtm.github.io/trainify/
+
 ---
 
 ## 📋 Descripción
 
 Trainify permite a los usuarios:
+
 - Registrarse e iniciar sesión
 - Crear, editar y eliminar rutinas de entrenamiento
 - Añadir y eliminar ejercicios dentro de cada rutina
@@ -40,37 +43,39 @@ trainify/
 
 ## 🚀 Instalación y puesta en marcha
 
-### Opción 1 – Abrir directamente en el navegador (más sencilla)
+### Opción 1 – Acceso directo (más sencilla)
+
+Accede directamente desde el navegador:
+
+```
+https://estebagsv30-lgtm.github.io/trainify/
+```
+
+### Opción 2 – Instalación local
 
 1. Descarga o clona el repositorio:
-   ```bash
-   git clone https://github.com/TU_USUARIO/trainify.git
-   ```
+
+```
+git clone https://github.com/estebagsv30-lgtm/trainify.git
+```
+
 2. Abre la carpeta descargada.
 3. Haz doble clic en el archivo `index.html`.
 4. La aplicación se abrirá en tu navegador predeterminado.
 
-> **No requiere servidor, instalación de software ni conexión a internet** una vez descargado (solo las fuentes de Google Fonts se cargan online).
-
-### Opción 2 – Ver en GitHub Pages (si está habilitado)
-
-Accede directamente a:
-```
-https://TU_USUARIO.github.io/trainify/
-```
+> **No requiere servidor, instalación de software ni conexión a internet** una vez descargado.
 
 ---
 
 ## 👤 Cómo usar la aplicación
 
-1. Abre `index.html` en el navegador.
+1. Abre la app en el navegador.
 2. Crea una cuenta nueva en la pestaña **"Registrarse"**.
 3. Inicia sesión con tu correo y contraseña.
 4. Desde el **Dashboard** puedes:
    - Crear nuevas rutinas con el botón **"+ Nueva rutina"**
    - Registrar tu peso corporal
 5. Haz clic en **"Ver detalle"** de una rutina para:
-   - Editar el nombre
    - Añadir o eliminar ejercicios
    - Registrar series, repeticiones y peso de cada sesión
    - Consultar el historial de esa rutina
@@ -79,12 +84,12 @@ https://TU_USUARIO.github.io/trainify/
 
 ## ⚙️ Requisitos
 
-| Requisito | Detalle |
-|-----------|---------|
-| Navegador | Chrome, Firefox, Edge o Safari (versión moderna) |
-| Servidor  | No necesario |
-| Internet  | Solo para cargar las fuentes tipográficas |
-| Sistema operativo | Windows, macOS o Linux |
+| Requisito         | Detalle                                          |
+| ----------------- | ------------------------------------------------ |
+| Navegador         | Chrome, Firefox, Edge o Safari (versión moderna) |
+| Servidor          | No necesario                                     |
+| Internet          | Solo para el acceso vía URL pública              |
+| Sistema operativo | Windows, macOS o Linux                           |
 
 ---
 
@@ -98,6 +103,6 @@ https://TU_USUARIO.github.io/trainify/
 
 ## 👨‍💻 Autor
 
-**Esteban Sanchez**  
-Ciclo Formativo: Desarrollo de Aplicaciones Multiplataforma (DAM)  
-Curso académico: 2025 – 2026
+**Esteban Sánchez**
+Ciclo Formativo: Desarrollo de Aplicaciones Multiplataforma (DAM)
+Centro: CESUR · Curso 2025–2026
